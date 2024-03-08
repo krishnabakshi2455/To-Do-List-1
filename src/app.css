@@ -1,0 +1,9 @@
+.upper-part{
+    width: 96%;
+    height: 24vh;
+    /* border: 2px solid black; */
+}
+.lower-part{
+    border: 2px solid red;
+    height: 56vh;
+}
