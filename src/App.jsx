@@ -4,27 +4,28 @@ import './Header/header.css'
 import Header from './Header/Header'
 import './app.css'
 import { useState, useEffect } from 'react'
+// const { v4: uuidv4 } = require('uuid');
 // import { ToastContainer, toast } from 'react-toastify'
 
 //  npx json-server --watch src/db.json --port 4006 // To create dummy server
 function App() {
   const [task, settask] = useState("")
-  const [tasksaver, settasksaver] = useState({
-    value: ""
-  })
+
+
   const editbtn = () => {
 
   }
   const deletebtn = () => {
-
+    document.getElementById('task-div').style.display = 'none';
   }
+
+  const [tasksaver, settasksaver] = useState([{ value: "" }])
   const inputvalue = (event) => {
     console.log(event.target.value);
     settasksaver((prevstate) => ({ ...prevstate, [event.target.id]: event.target.value }))
   }
   const submit = () => {
     axios.post("http://localhost:4006/data", tasksaver).then((res) => {
-      // toast.success("Successfully Register")
       console.log("Data Sended ");
     }).catch((err) => {
       console.log("error");
@@ -39,6 +40,19 @@ function App() {
     })
   }, [])
 
+  const handleCheckbox = (event, itemId) => {
+    const isChecked = event.target.checked;
+    const element = document.getElementById(`namecheck_${itemId}`);
+    if (element) {
+      if (isChecked) {
+        element.classList.add('line-through');
+        console.log("task completed");
+      } else {
+        element.classList.remove('line-through');
+        console.log("error");
+      }
+    }
+  };
   return (
     <>
       <Header />
@@ -69,15 +83,40 @@ function App() {
                 task && task.map((item) => {
                   return (
                     <>
-                      <p>{item.value}</p>
+
+                      <div className='mt-3 flex gap-4'>
+                        <div className='div-text'>
+                    
+                            <div key={item.id} className='flex gap-4'>
+                              <div>
+                                <input onChange={(e) => handleCheckbox(e, item.id)} type="checkbox" />
+                              </div>
+
+                              <div id={`namecheck_${item.id}`}>{item.value}</div>
+                              <div >{item.id}</div>
+                              <div className='buttons flex gap-4'>
+                                <button onClick={() => editbtn(item.id)} className='bg-violet-900 text-white p-1 py-1 rounded-md'>Edit</button>
+                                <button onClick={() => deletebtn(item.id)} className='bg-violet-900 text-white p-1 py-1 rounded-md'>Delete</button>
+                              </div>
+                            </div>
+    
+                        </div>
+                      </div>
+                      {/* ================================================================================= */}
+
+
+                      {/* I modified the handleCheckbox function to accept itemId as a parameter so that we can identify the specific item.
+                      
+                      I added unique identifiers to the id attribute of the <div> elements using the itemId. This ensures that each <div> has a unique id.
+                      
+                      The handleCheckbox function now uses document.getElementById with the dynamically generated id to target the specific <div> element associated with the checkbox.
+                      
+                      Now, the 'line-through' class will be applied or removed for each item individually based on whether its checkbox is checked or not. */}
+                      {/* ================================================================================= */}
                     </>
                   )
                 })
               }
-            </div>
-            <div className='div-button flex gap-3'>
-              <button onClick={editbtn} className='bg-violet-900 text-white p-1 py-1 rounded-md'>Edit</button>
-              <button onClick={deletebtn} className='bg-violet-900 text-white p-1 py-1 rounded-md'>Delete</button>
             </div>
           </div>
         </section>
