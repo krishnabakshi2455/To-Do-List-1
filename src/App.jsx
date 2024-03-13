@@ -40,19 +40,46 @@ function App() {
     })
   }, [])
 
+  // ==========================================================
+  
+
+  const [check2Visible, setCheck2Visible] = useState();
   const handleCheckbox = (event, itemId) => {
     const isChecked = event.target.checked;
-    const element = document.getElementById(`namecheck_${itemId}`);
+    setCheck3Visible(isChecked)
+    const element = document.getElementById(`namecheck_${itemId}`);   
+    const element2 = document.getElementById(`namecheck2_${itemId}`);
+    setCheck2Visible(element2);
     if (element) {
       if (isChecked) {
         element.classList.add('line-through');
-        console.log("task completed");
+        console.log("Task completed")
+        element2.style.display='none'
       } else {
         element.classList.remove('line-through');
-        console.log("error");
+        console.log("Task pending");
       }
     }
   };
+
+  const finishedornot = (event) => {
+    const isChecked = event.target.checked
+    console.log('checked-in',isChecked);
+    if (check2Visible) {
+      if (isChecked) {
+        check2Visible.style.display='flex';
+      } else {
+        check2Visible.style.display='none';
+      }
+    }
+
+  }
+
+  // ================================================================
+
+
+
+
   return (
     <>
       <Header />
@@ -66,16 +93,15 @@ function App() {
             <h2 className='mx-2 text-lg font-serif font-bold text-slate-100'>Add a Task</h2>
 
             <input onChange={inputvalue} id='value' type="text" className='mx-5 w-80 rounded-lg' /> <button onClick={submit} className='bg-violet-400 text-white p-3 py-1 rounded-md'>Save</button>
-
-            <div className='flex mx-5 mt-3 w-96 pb-3 border-b-2 border-black'>
-              <input type="checkbox" />
-              <p className='mx-3  font-serif'>Show Finished</p>
-            </div>
           </div>
         </section>
 
         <section className='lower-part'>
-          <h3 className='font-bold'>Your Tasks</h3>
+          <div className='flex mx-5  w-96 pb-3 border-b-2 border-black'>
+            <input type="checkbox" onChange={finishedornot} />
+            <p className='mx-3  font-serif'>Show Finished</p>
+          </div>
+          <h3 className='font-bold mt-4'>Your Tasks</h3>
           {/* =====Task List===== */}
           <div className='mt-3 flex gap-4'>
             <div className='div-text'>
@@ -87,7 +113,7 @@ function App() {
                       <div className='mt-3 flex gap-4'>
                         <div className='div-text'>
                     
-                            <div key={item.id} className='flex gap-4'>
+                          <div key={item.id} id={`namecheck2_${item.id}`} className='flex gap-4'>
                               <div>
                                 <input onChange={(e) => handleCheckbox(e, item.id)} type="checkbox" />
                               </div>
