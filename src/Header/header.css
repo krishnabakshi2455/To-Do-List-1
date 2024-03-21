@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media (max-width:480px) {
+    .main-heading{
+        justify-content: space-between;
+    }
+    .main-heading2{
+        gap:  1rem;
+    }
+    *{
+        padding: 0;
+        margin: 0;
+    }
+}
